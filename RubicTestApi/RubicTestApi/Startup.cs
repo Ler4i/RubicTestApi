@@ -11,12 +11,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using RubicTestApi.Controllers;
+using RubicTestApi.Context;
 
 namespace RubicTestApi
 {
-    public class Startup
+    public class Startup//сам сервер
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration)//конструктор
         {
             Configuration = configuration;
         }
@@ -26,27 +27,33 @@ namespace RubicTestApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<BudgetContext>(opt =>
-                opt.UseInMemoryDatabase("Budget"));
+            services.AddCors();
+            services.AddDbContext<NoteContext>(opt => //бегает за нас в сервер
+                opt.UseInMemoryDatabase("TestDB"));
+
+            services.AddDbContext<UserContext>(opt =>
+                opt.UseInMemoryDatabase("TestDB"));
             services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)//обязателен!!! app - важная переменная(сам сервер)
         {
-            if (env.IsDevelopment())
+            if (env.IsDevelopment())//потерн конвеер(все по порядку)
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseRouting();
+            app.UseCors(option => option.WithOrigins("http://localhost:8080").AllowAnyMethod());
+
+            app.UseRouting();//ходит по всем контролерам: route- ссылка на наш сервер на сайте
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
+            app.UseEndpoints(endpoints =>//маппинг- сопоставление одного с другим(надо указывать)
             {
                 endpoints.MapControllers();
-            });
+            });//заканчивается потерн конвеер(все по порядку)
         }
     }
 }

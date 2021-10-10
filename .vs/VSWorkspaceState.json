@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\RubicTestApi",
+    "\\RubicTestApi\\RubicTestApi",
+    "\\RubicTestApi\\RubicTestApi\\Context",
+    "\\RubicTestApi\\RubicTestApi\\Controllers",
+    "\\RubicTestApi\\RubicTestApi\\Models"
+  ],
+  "SelectedNode": "\\RubicTestApi\\RubicTestApi\\Models",
+  "PreviewInSolutionExplorer": false
+}
